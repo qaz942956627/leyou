@@ -1,0 +1,4 @@
+1.构建镜像
+docker build -t leyou:v1.0.0 ./
+
+docker build -t registry:v.0.0.1 .
