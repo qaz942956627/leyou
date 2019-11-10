@@ -23,7 +23,7 @@ public class LeyouCorsConfiguration {
         //所有请求方法 get put post delete head
         corsConfiguration.addAllowedMethod("*");
         //具体允许跨域的地址,如果要携带cookie 不能写*(所有地址都可以跨域访问)
-        corsConfiguration.addAllowedOrigin("http://manage.leyou.com");
+        corsConfiguration.addAllowedOrigin("http://manage.lutest.cn");
         //需要传cookie
         corsConfiguration.setAllowCredentials(true);
         //所有地址都需要校验是否跨域
