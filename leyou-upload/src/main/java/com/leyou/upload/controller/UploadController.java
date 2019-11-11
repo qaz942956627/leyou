@@ -21,13 +21,13 @@ public class UploadController {
     @Autowired
     private UploadService uploadService;
 
-//    @PostMapping("image")
-//    public ResponseEntity<String> uploadImage(@RequestParam("file")MultipartFile multipartFile ){
-//        String url = uploadService.uploadImage(multipartFile);
-//        if (StringUtils.isBlank(url)) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//        return ResponseEntity.status(HttpStatus.CREATED).body(url);
-//    }
+    @PostMapping("image")
+    public ResponseEntity<String> uploadImage(@RequestParam("file")MultipartFile multipartFile ){
+        String url = uploadService.uploadImage(multipartFile);
+        if (StringUtils.isBlank(url)) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(url);
+    }
 
 }

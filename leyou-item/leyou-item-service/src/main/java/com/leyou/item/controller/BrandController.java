@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -45,4 +46,11 @@ public class BrandController {
         }
         return ResponseEntity.ok(pageResult);
     }
+
+    @PostMapping("")
+    public ResponseEntity<Void> saveBrand(Brand brand){
+        this.brandService.saveBrand(brand);
+        return ResponseEntity.ok().build();
+    }
+
 }

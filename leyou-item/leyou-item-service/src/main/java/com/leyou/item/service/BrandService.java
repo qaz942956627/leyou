@@ -41,4 +41,8 @@ public class BrandService {
 
         return new PageResult<>(pageInfo.getTotal(),pageInfo.getList());
     }
+
+    public void saveBrand(Brand brand){
+        brandMapper.insert(brand);
+    }
 }
