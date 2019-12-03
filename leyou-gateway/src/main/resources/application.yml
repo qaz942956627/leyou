@@ -7,8 +7,9 @@ eureka:
   client:
     registry-fetch-interval-seconds: 30 #连接腾讯云数据库修改更长的超时时间
     service-url:
-      defaultZone: http://127.0.0.1:10086/eureka # 本地环境
-      # defaultZone: http://172.21.0.10:10086/eureka # 腾讯云环境
+      defaultZone: http://@ip@:10086/eureka # 腾讯云环境
+  instance:
+    prefer-ip-address: true #把ip注册到eureka了，不加的话我看过eureka注册界面，是以docker容器的container id注册过去的，譬如container id为abcde，那么当访问该微服务时，eureka以http://abcde/xxx，去访问的，当然是访问不到该服务。配置上面的选项后，就会以内网ip加端口去访问就能访问到了。
 zuul:
   prefix: /api # 路由路径前缀
   routes:
