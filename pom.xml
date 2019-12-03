@@ -92,5 +92,33 @@
         </plugins>
     </build>
 
+    <profiles>
+        <!-- 默认开发环境 -->
+        <profile>
+            <!--id唯一，不能有重复的-->
+            <id>dev</id>
+            <!--配置-->
+            <properties>
+                <!-- 环境标识，需要与配置文件的名称相对应 -->
+<!--                <restport>8076</restport>-->
+<!--                <serviceport>8089</serviceport>-->
+                <ip>127.0.0.1</ip>
+            </properties>
+            <activation>
+                <!--
+                     默认环境，如果设置了这个，则项目运行默认
+                     使用这个profile的配置
+                -->
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <!-- 生产环境 -->
+        <profile>
+            <id>product</id>
+            <properties>
+                <ip>172.21.0.10</ip>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

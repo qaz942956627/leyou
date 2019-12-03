@@ -4,7 +4,6 @@ spring:
   application:
     name: item-service
   datasource:
-    # url: jdbc:mysql://172.21.0.5:3306/leyou
     url: jdbc:mysql://cdb-13d922q2.bj.tencentcdb.com:10216/leyou
     username: root
     password: mysql123456
@@ -14,8 +13,8 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://127.0.0.1:10086/eureka
-      # defaultZone: http://172.21.0.10:10086/eureka
+      defaultZone: http://@ip@:10086/eureka
   instance:
     lease-renewal-interval-in-seconds: 30 # 5秒钟发送一次心跳
     lease-expiration-duration-in-seconds: 30 # 10秒不发送就过期
+    prefer-ip-address: true

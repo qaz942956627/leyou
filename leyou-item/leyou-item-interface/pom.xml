@@ -12,6 +12,13 @@
     <groupId>com.leyou.item</groupId>
     <artifactId>leyou-item-interface</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
