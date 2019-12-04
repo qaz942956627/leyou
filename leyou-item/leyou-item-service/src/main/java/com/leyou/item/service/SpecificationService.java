@@ -31,7 +31,7 @@ public class SpecificationService {
      * @param gid
      * @return
      */
-    public List<SpecParam> uqeryParams(Long gid) {
+    public List<SpecParam> queryParams(Long gid) {
         SpecParam specParam = new SpecParam();
         specParam.setGroupId(gid);
         return this.specParamMapper.select(specParam);

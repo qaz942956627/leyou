@@ -2,10 +2,12 @@ package com.leyou.item.service;
 
 import com.leyou.item.mapper.CategoryMapper;
 import com.leyou.item.pojo.Category;
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author 小卢
@@ -52,5 +54,10 @@ public class CategoryService {
         System.out.println("category.id="+id);
         int i = this.categoryMapper.deleteByPrimaryKey(id);
         System.out.println("成功删除"+i+"条数据!");
+    }
+
+    public List<String> queryNamesByIds(List<Long> ids) {
+        List<Category> categories = this.categoryMapper.selectByIdList(ids);
+        return categories.stream().map(category -> category.getName()).collect(Collectors.toList());
     }
 }
