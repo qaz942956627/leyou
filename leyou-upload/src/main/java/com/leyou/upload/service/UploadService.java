@@ -1,8 +1,11 @@
 package com.leyou.upload.service;
 
+import com.github.tobato.fastdfs.domain.StorePath;
+import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +26,9 @@ public class UploadService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UploadService.class);
 
+    @Autowired
+    private FastFileStorageClient storageClient;
+
     public String uploadImage(MultipartFile multipartFile) {
         String originalFilename = multipartFile.getOriginalFilename();
 
@@ -40,9 +46,12 @@ public class UploadService {
                 return null;
             }
             //保存到服务器
-            multipartFile.transferTo(new File("D:/images/"+originalFilename));
+            //multipartFile.transferTo(new File("D:/images/"+originalFilename));
+            String extName = StringUtils.substringAfterLast(multipartFile.getOriginalFilename(), ".");
+            StorePath storePath = this.storageClient.uploadFile(multipartFile.getInputStream(), multipartFile.getSize(), extName, null);
+
             //返回URL进行回显
-            return "http://image.lutest.cn/"+originalFilename;
+            return "http://image.lutest.cn/"+storePath.getFullPath();
         } catch (IOException e) {
             LOGGER.info("服务器内部错误,文件名:{}",originalFilename);
             e.printStackTrace();

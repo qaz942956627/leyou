@@ -9,10 +9,11 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://@ip@:10086/eureka
+      defaultZone: http://@registryIp@:10086/eureka
   instance:
     lease-renewal-interval-in-seconds: 15
     lease-expiration-duration-in-seconds: 30
+    prefer-ip-address: true
 fdfs:
   so-timeout: 1501 # 超时时间
   connect-timeout: 601 # 连接超时时间
