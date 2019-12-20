@@ -105,6 +105,7 @@
                 <itemServiceIp>127.0.0.1</itemServiceIp>
                 <registryIp>127.0.0.1</registryIp>
                 <gatewayIp>127.0.0.1</gatewayIp>
+                <uploadIp>49.233.70.50</uploadIp>
             </properties>
             <activation>
                 <!--
@@ -121,6 +122,7 @@
                 <itemServiceIp>172.21.0.10</itemServiceIp>
                 <registryIp>172.21.0.10</registryIp>
                 <gatewayIp>172.21.0.10</gatewayIp>
+                <uploadIp>172.21.0.10</uploadIp>
             </properties>
         </profile>
     </profiles>
