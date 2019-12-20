@@ -8,6 +8,7 @@ import com.leyou.pojo.PageResult;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -42,7 +43,15 @@ public class BrandService {
         return new PageResult<>(pageInfo.getTotal(),pageInfo.getList());
     }
 
-    public void saveBrand(Brand brand){
-        brandMapper.insert(brand);
+    @Transactional(rollbackFor = Exception.class)
+    public void saveBrand(Brand brand,Long[] cids){
+        this.brandMapper.insert(brand);
+        for (Long cid : cids) {
+            this.brandMapper.insertCategoryBrand(brand.getId(),cid);
+        }
+    }
+
+    public List<Brand> queryBrandsByCid(Long cid) {
+        return this.brandMapper.queryBrandsByCid(cid);
     }
 }

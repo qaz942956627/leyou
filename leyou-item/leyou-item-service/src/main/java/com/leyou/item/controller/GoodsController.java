@@ -10,8 +10,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-
 /**
  * @author 小卢
  */
@@ -32,7 +30,7 @@ public class GoodsController {
     @GetMapping("/spu/page")
     public ResponseEntity<PageResult<SpuBo>> querySpuByPage(
             @RequestParam(value = "key",required = false) String key,
-            @RequestParam(value = "saleable",required = false) boolean saleable,
+            @RequestParam(value = "saleable",defaultValue = "true") boolean saleable,
             @RequestParam(value = "page",defaultValue = "1") Integer page,
             @RequestParam(value = "rows",defaultValue = "5") Integer rows
     ){

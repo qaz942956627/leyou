@@ -8,9 +8,7 @@ import com.leyou.item.mapper.SpuMapper;
 import com.leyou.item.pojo.Brand;
 import com.leyou.item.pojo.Spu;
 import com.leyou.pojo.PageResult;
-import com.netflix.discovery.converters.Auto;
 import org.apache.commons.lang.StringUtils;
-import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,7 +47,9 @@ public class GoodsService {
         Example.Criteria criteria = example.createCriteria();
 
         //添加查询条件
-        criteria.andLike("title","%"+key+"%");
+        if (StringUtils.isNotBlank(key)) {
+            criteria.andLike("title","%"+key+"%");
+        }
 
         //添加上下架过滤条件
         criteria.andEqualTo("saleable",saleable);

@@ -7,10 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author 小卢
@@ -47,10 +46,19 @@ public class BrandController {
         return ResponseEntity.ok(pageResult);
     }
 
-    @PostMapping("")
-    public ResponseEntity<Void> saveBrand(Brand brand){
-        this.brandService.saveBrand(brand);
+    @PostMapping()
+    public ResponseEntity<Void> saveBrand(Brand brand,@RequestParam("cids") Long[] cids){
+        this.brandService.saveBrand(brand,cids);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("cid/{cid}")
+    public ResponseEntity<List<Brand>> queryBrandsByCid(@PathVariable("cid") Long cid){
+        List<Brand> brands = this.brandService.queryBrandsByCid(cid);
+        if (CollectionUtils.isEmpty(brands)) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(brands);
     }
 
 }
