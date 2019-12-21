@@ -1,7 +1,10 @@
 package com.leyou.item.controller;
 
+import com.leyou.item.bo.BrandBo;
 import com.leyou.item.pojo.Category;
+import com.leyou.item.service.BrandService;
 import com.leyou.item.service.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,6 +25,9 @@ public class CategoryController {
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
+
+    @Autowired
+    private BrandService brandService;
 
     @GetMapping("/list")
     public ResponseEntity<List<Category>> queryCategoryByPid(@RequestParam("pid")Long pid){
@@ -57,6 +63,31 @@ public class CategoryController {
     public ResponseEntity<Void> deleteCategory(@PathVariable("id") Long id){
         this.categoryService.deleteCategory(id);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("bid/{bid}")
+    public ResponseEntity<BrandBo> editBrand(@PathVariable("bid")Long bid){
+        if (bid == null || bid < 0) {
+            return ResponseEntity.badRequest().build();
+        }
+        BrandBo brandBo = this.brandService.queryBrandsAndCidsByBid(bid);
+        if (brandBo==null) {
+            //404 资源未找到
+            return ResponseEntity.notFound().build();
+        }
+        //200 查询成功返回数据
+        return ResponseEntity.ok(brandBo);
+    }
+    @DeleteMapping("bid/{bid}")
+    public ResponseEntity<Void> deleteBrand(@PathVariable("bid")Long bid){
+        if (bid == null || bid < 0) {
+            return ResponseEntity.badRequest().build();
+        }
+        Integer count = this.brandService.deleteBrandsAndCidsByBid(bid);
+        if (count==0) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().build();
     }
 
 }

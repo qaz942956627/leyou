@@ -46,7 +46,7 @@ public class BrandController {
         return ResponseEntity.ok(pageResult);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Void> saveBrand(Brand brand,@RequestParam("cids") Long[] cids){
         this.brandService.saveBrand(brand,cids);
         return ResponseEntity.ok().build();

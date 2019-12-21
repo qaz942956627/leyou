@@ -2,10 +2,14 @@ package com.leyou.item.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.leyou.item.bo.BrandBo;
 import com.leyou.item.mapper.BrandMapper;
 import com.leyou.item.pojo.Brand;
 import com.leyou.pojo.PageResult;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +22,8 @@ import java.util.List;
  */
 @Service
 public class BrandService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BrandService.class);
 
     @Autowired
     private BrandMapper brandMapper;
@@ -53,5 +59,26 @@ public class BrandService {
 
     public List<Brand> queryBrandsByCid(Long cid) {
         return this.brandMapper.queryBrandsByCid(cid);
+    }
+
+    public BrandBo queryBrandsAndCidsByBid(Long bid) {
+        Brand brand = this.brandMapper.selectByPrimaryKey(bid);
+        LOGGER.info("品牌数据:{}",brand);
+        List<Long> cids = this.brandMapper.queryCidsByBid(brand.getId());
+        LOGGER.info("cids:{}",cids);
+        BrandBo brandBo = new BrandBo();
+        BeanUtils.copyProperties(brand,brandBo);
+        brandBo.setCids(cids);
+        LOGGER.info("brandBo:{}",brandBo);
+        return brandBo;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Integer deleteBrandsAndCidsByBid(Long bid) {
+        int counts = this.brandMapper.deleteCategoryBrandByBid(bid);
+        LOGGER.info("中间表数据删除了{}条!",counts);
+        int count = this.brandMapper.deleteByPrimaryKey(bid);
+        LOGGER.info("品牌表删除了{}条数据!",count);
+        return count;
     }
 }
