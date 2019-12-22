@@ -12,6 +12,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -49,5 +51,15 @@ public class FastDFSTest {
         // 获取缩略图路径
         String path = thumbImageConfig.getThumbImagePath(storePath.getPath());
         System.out.println(path);
+    }
+
+    @Test
+    public void forEachTest(){
+        List<String> s = new ArrayList<>();
+        s.add("s1");
+        s.add("s12");
+        s.add("s13");
+        s.add("s14");
+        s.forEach(s1 -> System.out.println(s1));
     }
 }

@@ -29,11 +29,17 @@ public class SpecificationService {
     /***
      * 根据条件查询规格参数
      * @param gid
+     * @param cid
+     * @param generic
+     * @param searching
      * @return
      */
-    public List<SpecParam> queryParams(Long gid) {
+    public List<SpecParam> queryParams(Long gid, Long cid, Boolean generic, Boolean searching) {
         SpecParam specParam = new SpecParam();
         specParam.setGroupId(gid);
+        specParam.setCid(cid);
+        specParam.setGeneric(generic);
+        specParam.setSearching(searching);
         return this.specParamMapper.select(specParam);
     }
 }

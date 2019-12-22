@@ -28,7 +28,7 @@ public class BrandService {
     @Autowired
     private BrandMapper brandMapper;
 
-    public PageResult<Brand> queryBrandByPage(String key, Integer page, Integer rows, String sortBy, boolean desc) {
+    public PageResult<Brand> queryBrandByPage(String key, Integer page, Integer rows, String sortBy, Boolean desc) {
         Example example = new Example(Brand.class);
         Example.Criteria criteria = example.createCriteria();
         //根据姓名模糊查询或者根据首字母查询

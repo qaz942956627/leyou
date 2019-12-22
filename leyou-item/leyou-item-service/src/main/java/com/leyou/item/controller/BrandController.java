@@ -36,7 +36,7 @@ public class BrandController {
             @RequestParam(value = "page",defaultValue = "1")Integer page,
             @RequestParam(value = "rows",defaultValue = "5")Integer rows,
             @RequestParam(value = "sortBy",required = false)String sortBy,
-            @RequestParam(value = "desc",required = false)boolean desc
+            @RequestParam(value = "desc",required = false)Boolean desc
     ){
         PageResult<Brand> pageResult = this.brandService.queryBrandByPage(key,page,rows,sortBy,desc);
         if (CollectionUtils.isEmpty(pageResult.getItems())) {
