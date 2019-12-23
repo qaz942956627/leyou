@@ -2,6 +2,9 @@ package com.leyou.pojo;
 
 import java.util.List;
 
+/**
+ * @author 小卢
+ */
 public class PageResult<T> {
 
     private Long total;

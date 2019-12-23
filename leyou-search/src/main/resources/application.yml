@@ -1,0 +1,17 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: leyou-search
+  data:
+    elasticsearch:
+      cluster-name: elasticsearch
+      cluster-nodes: 101.200.152.214:9300
+eureka:
+  client:
+    service-url:
+      defaultZone: http://@registryIp@:10086/eureka
+    registry-fetch-interval-seconds: 10
+  instance:
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 20

@@ -81,4 +81,8 @@ public class BrandService {
         LOGGER.info("品牌表删除了{}条数据!",count);
         return count;
     }
+
+    public Brand queryBrandById(Long id) {
+        return this.brandMapper.selectByPrimaryKey(id);
+    }
 }
