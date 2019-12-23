@@ -31,10 +31,19 @@ public interface GoodsApi {
             @RequestParam(value = "rows",defaultValue = "5") Integer rows
     );
 
-
+    /***
+     * 根据spuId获取spuDetail
+     * @param spuId spuId
+     * @return spuDetail
+     */
     @GetMapping("spu/detail/{spuId}")
     SpuDetail querySpuDetailBySpuId(@PathVariable Long spuId);
 
+    /***
+     * 根据spuId获取所有sku的集合
+     * @param id spuId
+     * @return sku的集合
+     */
     @GetMapping("sku/list")
-    ResponseEntity<List<Sku>> querySkusBySpuId(@RequestParam("id") Long id);
+    List<Sku> querySkusBySpuId(@RequestParam("id") Long id);
 }
