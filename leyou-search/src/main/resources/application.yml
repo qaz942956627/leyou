@@ -5,7 +5,7 @@ spring:
     name: leyou-search
   data:
     elasticsearch:
-      cluster-name: elasticsearch
+      cluster-name: my-application
       cluster-nodes: 101.200.152.214:9300
 eureka:
   client:
