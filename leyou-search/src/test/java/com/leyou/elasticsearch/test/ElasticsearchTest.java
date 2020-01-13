@@ -41,11 +41,12 @@ public class ElasticsearchTest {
         Integer page = 1;
         Integer rows = 100;
 
-        while (rows<100){
+        while (rows==100){
             //分页查询spu,获取分页结果集
             PageResult<SpuBo> result = this.goodsClient.querySpuByPage(null, null, page, rows);
             //获取当前页的数据
             List<SpuBo> items = result.getItems();
+            System.out.println(items.size());
             //处理List<spuBo> ==> List<Goods>
             List<Goods> goodsList = items.stream().map(spuBo -> {
                 Goods goods = this.searchService.buildGoods(spuBo);
