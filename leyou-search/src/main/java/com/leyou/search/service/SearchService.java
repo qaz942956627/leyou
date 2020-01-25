@@ -2,27 +2,30 @@ package com.leyou.search.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.leyou.item.pojo.*;
-import com.leyou.pojo.PageResult;
 import com.leyou.search.client.BrandClient;
 import com.leyou.search.client.CategoryClient;
 import com.leyou.search.client.GoodsClient;
 import com.leyou.search.client.SpecificationClient;
 import com.leyou.search.pojo.Goods;
 import com.leyou.search.pojo.SearchRequest;
+import com.leyou.search.pojo.SearchResult;
 import com.leyou.search.repository.GoodsRepository;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.Aggregation;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.LongTerms;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author 小卢
@@ -151,7 +154,7 @@ public class SearchService {
 
 
 
-    public PageResult<Goods> search(SearchRequest request) {
+    public SearchResult search(SearchRequest request) {
         String key = request.getKey();
         // 判断是否有搜索条件，如果没有，直接返回null。不允许搜索全部商品
         if (StringUtils.isBlank(key)) {
@@ -174,10 +177,55 @@ public class SearchService {
         int size = request.getSize();
         queryBuilder.withPageable(PageRequest.of(page - 1, size));
 
+        //添加分类和品牌的聚合
+        String categoryAggName = "categories";
+        String brandAggName = "brands";
+
+        queryBuilder.addAggregation(AggregationBuilders.terms(categoryAggName).field("cid3"));
+        queryBuilder.addAggregation(AggregationBuilders.terms(brandAggName).field("brandId"));
+
         // 4、查询，获取结果
-        Page<Goods> goodsPage = this.goodsRepository.search(queryBuilder.build());
+        AggregatedPage<Goods> goodsPage = (AggregatedPage<Goods>) this.goodsRepository.search(queryBuilder.build());
+        List<Map<String,Object>> categorys = getCategoryAggResult(goodsPage.getAggregation(categoryAggName));
+        List<Brand> brands = getBrandAggResult(goodsPage.getAggregation(brandAggName));
 
         // 封装结果并返回
-        return new PageResult<>(goodsPage.getTotalElements(), goodsPage.getTotalPages(), goodsPage.getContent());
+        return new SearchResult(goodsPage.getTotalElements(), goodsPage.getTotalPages(), goodsPage.getContent(),categorys,brands);
+    }
+
+    /***
+     * 解析品牌的聚合结果集
+     * @param aggregation
+     * @return
+     */
+    private List<Brand> getBrandAggResult(Aggregation aggregation) {
+        LongTerms terms = (LongTerms) aggregation;
+        //通过词条获取每一个桶
+        List<Brand> brands = terms.getBuckets().stream().map(bucket -> {
+            //遍历每一个桶获取到品牌id
+            long brandId = bucket.getKeyAsNumber().longValue();
+            //调用品牌接口获取每个品牌对象
+            Brand brand = this.brandClient.queryBrandById(brandId);
+            return brand;
+        }).collect(Collectors.toList());
+        return brands;
+    }
+
+    /***
+     * 解析分类的聚合结果集
+     * @param aggregation
+     * @return
+     */
+    private List<Map<String, Object>> getCategoryAggResult(Aggregation aggregation) {
+        LongTerms terms = (LongTerms) aggregation;
+        List<Map<String, Object>> maps = terms.getBuckets().stream().map(bucket -> {
+            Map<String, Object> map = new HashMap<>();
+            Long id = bucket.getKeyAsNumber().longValue();
+            List<String> names = this.categoryClient.queryNamesByIds(Arrays.asList(id));
+            map.put("id", id);
+            map.put("name", names.get(0));
+            return map;
+        }).collect(Collectors.toList());
+        return maps;
     }
 }

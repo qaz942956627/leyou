@@ -2,11 +2,13 @@ server:
   port: 8083
 spring:
   application:
-    name: leyou-search
+    name: search-service
   data:
     elasticsearch:
       cluster-name: my-application
       cluster-nodes: 101.200.152.214:9300
+  jackson:
+    default-property-inclusion: non_null
 eureka:
   client:
     service-url:
@@ -16,5 +18,5 @@ eureka:
     lease-renewal-interval-in-seconds: 10
     lease-expiration-duration-in-seconds: 20
 #ribbon:
-#  ReadTimeout: 60000
-#  ConnectTimeout: 60000
+#  ReadTimeout: 30000
+#  ConnectTimeout: 30000

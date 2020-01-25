@@ -7,7 +7,7 @@ eureka:
   client:
     registry-fetch-interval-seconds: 30 #连接腾讯云数据库修改更长的超时时间
     service-url:
-      defaultZone: http://@gatewayIp@:10086/eureka # 腾讯云环境
+      defaultZone: http://@registryIp@:10086/eureka # 腾讯云环境
   instance:
     prefer-ip-address: true #把ip注册到eureka了，不加的话我看过eureka注册界面，是以docker容器的container id注册过去的，譬如container id为abcde，那么当访问该微服务时，eureka以http://abcde/xxx，去访问的，当然是访问不到该服务。配置上面的选项后，就会以内网ip加端口去访问就能访问到了。
 zuul:
@@ -15,17 +15,23 @@ zuul:
   routes:
         item-service: /item/** # 商品微服务的映射路径
         search-service: /search/** # 搜索微服务路径
+  host:
+    max-total-connections: 10000
+    max-per-route-connections: 10000
+  semaphore:
+    max-semaphores: 200
 #hystrix的超时时间
-#hystrix:
-#  command:
-#    default:
-#      execution:
-#        timeout:
-#          enabled: true
-#        isolation:
-#          thread:
-#            timeoutInMilliseconds: 30000
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000
 ##ribbon的超时时间
-#ribbon:
-#  ReadTimeout: 30000
-#  ConnectTimeout: 30000
+ribbon:
+  ReadTimeout: 30000
+  ConnectTimeout: 30000
+
